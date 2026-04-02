@@ -1,161 +1,164 @@
+// ===============================
 // MOBILE HAMBURGER MENU
+// ===============================
 
-const menuToggle = document.getElementById("menu-toggle");
-const navMenu = document.getElementById("nav-menu");
+const hamburger = document.querySelector(".hamburger");
+const nav = document.querySelector("nav");
 
-menuToggle.addEventListener("click", () => {
+hamburger.addEventListener("click", () => {
+nav.classList.toggle("active");
+});
 
-    if(navMenu.style.display === "flex"){
-        navMenu.style.display = "none";
-    } else {
-        navMenu.style.display = "flex";
-        navMenu.style.flexDirection = "column";
-    }
+
+// ===============================
+// SMOOTH SCROLL NAVIGATION
+// ===============================
+
+document.querySelectorAll("nav a").forEach(anchor => {
+
+anchor.addEventListener("click", function(e){
+
+e.preventDefault();
+
+const target = document.querySelector(this.getAttribute("href"));
+
+target.scrollIntoView({
+behavior: "smooth"
+});
+
+nav.classList.remove("active");
+
+});
 
 });
 
 
+// ===============================
+// HERO BACKGROUND IMAGE ROTATION
+// ===============================
 
-// CLOSE MENU AFTER CLICK (MOBILE)
+const hero = document.querySelector(".hero");
 
-document.querySelectorAll("#nav-menu a").forEach(link => {
+const heroImages = [
 
-    link.addEventListener("click", () => {
+"https://images.unsplash.com/photo-1414235077428-338989a2e8c0",
+"https://images.unsplash.com/photo-1555396273-367ea4eb4db5",
+"https://images.unsplash.com/photo-1504674900247-0877df9cc836",
+"https://images.unsplash.com/photo-1546069901-ba9599a7e63c",
+"https://images.unsplash.com/photo-1555939594-58d7cb561ad1",
+"https://images.unsplash.com/photo-1498654896293-37aacf113fd9",
+"https://images.unsplash.com/photo-1506086679525-9e74c7c2f76d",
+"https://images.unsplash.com/photo-1528605248644-14dd04022da1",
+"https://images.unsplash.com/photo-1466978913421-dad2ebd01d17",
+"https://images.unsplash.com/photo-1555992336-03a23c6c81d6",
+"https://images.unsplash.com/photo-1525610553991-2bede1a236e2",
+"https://images.unsplash.com/photo-1551218808-94e220e084d2",
+"https://images.unsplash.com/photo-1517248135467-4c7edcad34c4",
+"https://images.unsplash.com/photo-1470337458703-46ad1756a187",
+"https://images.unsplash.com/photo-1544145945-f90425340c7e",
+"https://images.unsplash.com/photo-1504674900247-0877df9cc836",
+"https://images.unsplash.com/photo-1498654896293-37aacf113fd9",
+"https://images.unsplash.com/photo-1528605248644-14dd04022da1",
+"https://images.unsplash.com/photo-1555939594-58d7cb561ad1",
+"https://images.unsplash.com/photo-1555396273-367ea4eb4db5"
 
-        if(window.innerWidth <= 768){
-            navMenu.style.display = "none";
-        }
+];
 
-    });
+let heroIndex = 0;
 
-});
+function changeHeroImage(){
+
+heroIndex++;
+
+if(heroIndex >= heroImages.length){
+heroIndex = 0;
+}
+
+hero.style.backgroundImage = `url(${heroImages[heroIndex]})`;
+
+}
+
+setInterval(changeHeroImage, 5000);
 
 
 
-// STICKY NAVBAR EFFECT
+// ===============================
+// SCROLL REVEAL ANIMATION
+// ===============================
 
-const navbar = document.querySelector(".navbar");
+const sections = document.querySelectorAll("section");
 
 window.addEventListener("scroll", () => {
 
-    if(window.scrollY > 50){
-        navbar.style.background = "rgba(0,0,0,0.95)";
-        navbar.style.transition = "0.3s";
-    }else{
-        navbar.style.background = "rgba(0,0,0,0.8)";
-    }
+sections.forEach(section => {
+
+const sectionTop = section.getBoundingClientRect().top;
+const trigger = window.innerHeight / 1.2;
+
+if(sectionTop < trigger){
+
+section.style.opacity = "1";
+section.style.transform = "translateY(0)";
+
+}
+
+});
+
+});
+
+sections.forEach(section => {
+
+section.style.opacity = "0";
+section.style.transform = "translateY(60px)";
+section.style.transition = "all 1s";
 
 });
 
 
-
-
-// SMOOTH SCROLL
-
-document.querySelectorAll('nav a').forEach(anchor => {
-
-    anchor.addEventListener("click", function(e){
-
-        e.preventDefault();
-
-        const target = document.querySelector(this.getAttribute("href"));
-
-        if(target){
-
-            target.scrollIntoView({
-                behavior: "smooth"
-            });
-
-        }
-
-    });
-
-});
-
-
-
-
+// ===============================
 // GALLERY LIGHTBOX
+// ===============================
 
 const galleryImages = document.querySelectorAll(".gallery-grid img");
 
 galleryImages.forEach(img => {
 
-    img.addEventListener("click", () => {
+img.addEventListener("click", () => {
 
-        const lightbox = document.createElement("div");
+const overlay = document.createElement("div");
+overlay.style.position = "fixed";
+overlay.style.top = "0";
+overlay.style.left = "0";
+overlay.style.width = "100%";
+overlay.style.height = "100%";
+overlay.style.background = "rgba(0,0,0,0.9)";
+overlay.style.display = "flex";
+overlay.style.alignItems = "center";
+overlay.style.justifyContent = "center";
+overlay.style.zIndex = "2000";
 
-        lightbox.style.position = "fixed";
-        lightbox.style.top = "0";
-        lightbox.style.left = "0";
-        lightbox.style.width = "100%";
-        lightbox.style.height = "100%";
-        lightbox.style.background = "rgba(0,0,0,0.9)";
-        lightbox.style.display = "flex";
-        lightbox.style.alignItems = "center";
-        lightbox.style.justifyContent = "center";
-        lightbox.style.zIndex = "2000";
+const largeImg = document.createElement("img");
+largeImg.src = img.src;
+largeImg.style.maxWidth = "90%";
+largeImg.style.maxHeight = "90%";
+largeImg.style.borderRadius = "10px";
 
-        const image = document.createElement("img");
+overlay.appendChild(largeImg);
 
-        image.src = img.src;
-        image.style.maxWidth = "90%";
-        image.style.maxHeight = "90%";
+overlay.addEventListener("click", () => {
+overlay.remove();
+});
 
-        lightbox.appendChild(image);
+document.body.appendChild(overlay);
 
-        document.body.appendChild(lightbox);
-
-        lightbox.addEventListener("click", () => {
-            lightbox.remove();
-        });
-
-    });
+});
 
 });
 
 
-
-
-// SCROLL REVEAL ANIMATION
-
-const sections = document.querySelectorAll("section");
-
-const revealSection = () => {
-
-    const triggerBottom = window.innerHeight * 0.85;
-
-    sections.forEach(section => {
-
-        const sectionTop = section.getBoundingClientRect().top;
-
-        if(sectionTop < triggerBottom){
-            section.style.opacity = "1";
-            section.style.transform = "translateY(0)";
-        }
-
-    });
-
-};
-
-
-
-// INITIAL STATE
-
-sections.forEach(section => {
-
-    section.style.opacity = "0";
-    section.style.transform = "translateY(60px)";
-    section.style.transition = "all 0.8s ease";
-
-});
-
-window.addEventListener("scroll", revealSection);
-
-
-
-
+// ===============================
 // RESERVATION FORM
+// ===============================
 
 const reservationForm = document.querySelector(".reservation form");
 
@@ -165,7 +168,7 @@ reservationForm.addEventListener("submit", function(e){
 
 e.preventDefault();
 
-alert("🎉 Reservation request received! Our team will contact you shortly.");
+alert("Reservation received! Our team will contact you shortly.");
 
 reservationForm.reset();
 
